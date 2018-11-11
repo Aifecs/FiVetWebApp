@@ -4,11 +4,11 @@ export class Paciente {
         public especie?: string,
         public raza?: string,
         public color?: string,
-        public cliente?: String[],
+        public clientes?: String[],
         public castrado?: boolean,
         public chip?: string,
         public ultimaVisita?: Date,
         public foto?: ArrayBuffer){
-
+        
         }
 }

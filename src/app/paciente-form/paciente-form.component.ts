@@ -1,6 +1,7 @@
 import { Component, OnInit, Input} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Paciente} from "../Classes/Paciente";
+import { ReactiveFormsModule } from '@angular/forms';
 import * as _ from "lodash";
 import 'rxjs/add/operator/map';
 
@@ -17,19 +18,32 @@ export class PacienteFormComponent implements OnInit {
   }
   ngOnInit() {
     var url = "http://localhost:80/pacientes/";
+
     if(this.pacienteId){
       url += this.pacienteId;
     }
+
     this.http
       .get<Paciente>(url)
-      .map(res => {
-          return new Paciente(res.nombre, res.especie, res.raza, res.color,
-            res.cliente, res.castrado, res.chip, res.ultimaVisita, res.foto);
-      })
       .subscribe(data => {
-        console.log(data);
         this.paciente = data;
+        console.log(this.paciente);
     });
   }
 
+  getCliente(index: number): String {
+    if(this.paciente.clientes && index < this.paciente.clientes.length && index >= 0){
+      return this.paciente.clientes[index];
+    } else {
+      return null;
+    }
+  }
+
+  getUltimaVisita(): Date {
+    if(this.paciente.ultimaVisita)
+      return this.paciente.ultimaVisita;
+    else {
+      return new Date(Date.now());
+    }
+  }
 }
