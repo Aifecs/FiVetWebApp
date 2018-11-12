@@ -1,6 +1,7 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, HostBinding} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Paciente} from "../Classes/Paciente";
+import {PacienteSearchBoxService} from '../paciente-search-box/paciente-search-box.service';
 import * as _ from "lodash";
 import 'rxjs/add/operator/map';
 
@@ -10,26 +11,35 @@ import 'rxjs/add/operator/map';
   styleUrls: ['./paciente-form.component.css']
 })
 export class PacienteFormComponent implements OnInit {
+
+  @HostBinding('class.paciente')
   paciente: Paciente = new Paciente();
-  @Input()
-  pacienteId:string;
-  constructor(private http:HttpClient) {
+  pacienteExistente: boolean;
+  fecha:Date = new Date(Date.now());
+
+  constructor(private http:HttpClient, private pacienteSearchBoxService:PacienteSearchBoxService) {
   }
-  ngOnInit() {
-    var url = "http://localhost:80/pacientes/";
-    if(this.pacienteId){
-      url += this.pacienteId;
-    }
-    this.http
-      .get<Paciente>(url)
-      .map(res => {
-          return new Paciente(res.nombre, res.especie, res.raza, res.color,
-            res.cliente, res.castrado, res.chip, res.ultimaVisita, res.foto);
-      })
-      .subscribe(data => {
-        console.log(data);
-        this.paciente = data;
+  ngOnInit() { 
+    this.pacienteSearchBoxService.changePaciente.subscribe(
+      (paciente: Paciente) => {
+        this.pacienteExistente = paciente._id != undefined;
+        this.paciente = paciente;
     });
   }
 
+  getUltimaVisita(): Date {
+    if(this.paciente.ultimaVisita)
+      return this.paciente.ultimaVisita;
+    else {
+      return new Date(Date.now());
+    }
+  }
+
+  castradoChanged = (event) => {
+    console.log(event.target.checked);
+  }
+
+  getButtonName(): string{
+    return "Actualizar Paciente";
+  }
 }
