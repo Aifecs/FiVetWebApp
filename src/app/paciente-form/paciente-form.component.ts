@@ -1,7 +1,7 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, HostBinding} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Paciente} from "../Classes/Paciente";
-import { ReactiveFormsModule } from '@angular/forms';
+import {PacienteSearchBoxService} from '../paciente-search-box/paciente-search-box.service';
 import * as _ from "lodash";
 import 'rxjs/add/operator/map';
 
@@ -11,32 +11,18 @@ import 'rxjs/add/operator/map';
   styleUrls: ['./paciente-form.component.css']
 })
 export class PacienteFormComponent implements OnInit {
+
+  @HostBinding('class.paciente')
   paciente: Paciente = new Paciente();
-  @Input()
-  pacienteId:string;
-  constructor(private http:HttpClient) {
+
+  constructor(private http:HttpClient, private pacienteSearchBoxService:PacienteSearchBoxService) {
   }
-  ngOnInit() {
-    var url = "http://localhost:80/pacientes/";
-
-    if(this.pacienteId){
-      url += this.pacienteId;
-    }
-
-    this.http
-      .get<Paciente>(url)
-      .subscribe(data => {
-        this.paciente = data;
-        console.log(this.paciente);
+  ngOnInit() { 
+    this.pacienteSearchBoxService.changePaciente.subscribe(
+      (paciente: Paciente) => {
+        console.log(paciente);
+        this.paciente = paciente;
     });
-  }
-
-  getCliente(index: number): String {
-    if(this.paciente.clientes && index < this.paciente.clientes.length && index >= 0){
-      return this.paciente.clientes[index];
-    } else {
-      return null;
-    }
   }
 
   getUltimaVisita(): Date {
