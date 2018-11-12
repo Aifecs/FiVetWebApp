@@ -5,11 +5,13 @@ import {HttpClientModule} from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PacienteFormComponent } from './paciente-form/paciente-form.component';
+import { RegistroMedicoFormsComponent } from './registro-medico-forms/registro-medico-forms.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PacienteFormComponent
+    PacienteFormComponent,
+    RegistroMedicoFormsComponent
   ],
   imports: [
     BrowserModule,
