@@ -14,13 +14,15 @@ export class PacienteFormComponent implements OnInit {
 
   @HostBinding('class.paciente')
   paciente: Paciente = new Paciente();
+  pacienteExistente: boolean;
+  fecha:Date = new Date(Date.now());
 
   constructor(private http:HttpClient, private pacienteSearchBoxService:PacienteSearchBoxService) {
   }
   ngOnInit() { 
     this.pacienteSearchBoxService.changePaciente.subscribe(
       (paciente: Paciente) => {
-        console.log(paciente);
+        this.pacienteExistente = paciente._id != undefined;
         this.paciente = paciente;
     });
   }
@@ -31,5 +33,13 @@ export class PacienteFormComponent implements OnInit {
     else {
       return new Date(Date.now());
     }
+  }
+
+  castradoChanged = (event) => {
+    console.log(event.target.checked);
+  }
+
+  getButtonName(): string{
+    return "Actualizar Paciente";
   }
 }

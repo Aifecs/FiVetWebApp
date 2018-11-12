@@ -1,10 +1,15 @@
-label {
-    display: block;
-    padding-left: 15px;
-    text-indent: -15px;
-  }
+.column {
+    float: left;
+    width: 50%;
+}
 
-  h1 {
-      margin-bottom: 0;
-      margin-top: 5
-  }
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.img-fluid {
+    width: 80%;
+}
